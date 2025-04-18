@@ -31,7 +31,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {
+  onMounted,
+  watch,
+  ref
+} from 'vue';
 
 type Todo = {
   text: string
@@ -50,4 +54,21 @@ const addTodo = () => {
 const removeTodo = (index: number) => {
   todos.value.splice(index, 1);
 };
+
+const loadTodos = () => {
+  const savedTodos = localStorage.getItem('todos');
+  if (savedTodos) {
+    todos.value = JSON.parse(savedTodos);
+  }
+};
+
+const saveTodos = () => {
+  localStorage.setItem('todos', JSON.stringify(todos.value));
+};
+
+watch(todos, saveTodos, { deep: true });
+
+onMounted(() => {
+  loadTodos();
+});
 </script>
