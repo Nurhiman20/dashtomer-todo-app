@@ -18,7 +18,7 @@
       <ul class="space-y-2">
         <li v-for="(todo, index) in todos" :key="index" class="flex items-center justify-between bg-white p-3 rounded-lg shadow">
           <div class="flex items-center gap-2">
-            <input type="checkbox" v-model="todo.done" @change="markComplete(index)" class="w-5 h-5 text-blue-500 focus:ring-blue-400">
+            <input type="checkbox" v-model="todo.done" class="w-5 h-5 text-blue-500 focus:ring-blue-400">
             <span :class="{ 'line-through text-gray-400': todo.done }" class="cursor-pointer">
               {{ todo.text }}
             </span>
@@ -41,11 +41,13 @@ type Todo = {
 const todos = ref<Todo[]>([]);
 const newTodo = ref<string>('');
 
-const addTodo = () => {};
-const removeTodo = (index: number) => {
-  console.log(index);
+const addTodo = () => {
+  if (newTodo.value.trim() !== '') {
+    todos.value.push({ text: newTodo.value.trim(), done: false });
+    newTodo.value = '';
+  }
 };
-const markComplete = (index: number) => {
-  console.log(index);
-}
+const removeTodo = (index: number) => {
+  todos.value.splice(index, 1);
+};
 </script>
